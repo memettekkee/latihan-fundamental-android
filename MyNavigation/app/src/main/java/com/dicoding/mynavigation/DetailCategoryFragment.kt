@@ -49,5 +49,4 @@ class DetailCategoryFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
-
 }
