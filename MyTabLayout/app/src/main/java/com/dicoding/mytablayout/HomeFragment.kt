@@ -23,4 +23,16 @@ class HomeFragment : Fragment() {
         val view = binding.root
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val index = arguments?.getInt(ARG_SECTION_NUMBER, 0)
+
+        binding.sectionLabel.text = getString(R.string.content_tab_text, index)
+    }
+
+    companion object {
+        const val ARG_SECTION_NUMBER = "section_number"
+    }
 }
