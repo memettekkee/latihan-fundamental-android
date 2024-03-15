@@ -51,7 +51,8 @@ class MainActivity : AppCompatActivity() {
 //            .load(profileImageUrl)
 //            .into(profileCircleImageView)
 
-        profileCircleImageView.setImageDrawable(drawable)
+//        profileCircleImageView.setImageDrawable(drawable)
+        profileCircleImageView.setImageResource(R.drawable.foto_resmi)
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Passing each menu ID as a set of Ids because each
