@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="app_name">Restaurant Review</string>
+    <string name="description">Description</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="review">Review</string>
+    <string name="send">Kirim</string>
+    <string name="title">Judul</string>
+    <string name="write_your_review_here">Write your review here..</string>
+    <style name="Base.Theme.RestaurantReview" parent="Theme.Material3.DayNight.NoActionBar">
+        
+        
+    </style>
+    <style name="Theme.RestaurantReview" parent="Base.Theme.RestaurantReview"/>
+</resources>

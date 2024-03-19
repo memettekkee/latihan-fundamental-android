@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "com.dicoding.restaurantreview.app-mergeDebugResources-32:/layout/item_review.xml",
+        "source": "com.dicoding.restaurantreview.app-main-35:/layout/item_review.xml"
+    },
+    {
+        "merged": "com.dicoding.restaurantreview.app-mergeDebugResources-32:/layout/activity_main.xml",
+        "source": "com.dicoding.restaurantreview.app-main-35:/layout/activity_main.xml"
+    }
+]

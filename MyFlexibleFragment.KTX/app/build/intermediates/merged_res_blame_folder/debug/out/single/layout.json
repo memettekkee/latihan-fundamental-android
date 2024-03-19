@@ -1,0 +1,26 @@
+[
+    {
+        "merged": "com.dicoding.myflexiblefragment.app-mergeDebugResources-31:/layout/fragment_option_dialog.xml",
+        "source": "com.dicoding.myflexiblefragment.app-main-34:/layout/fragment_option_dialog.xml"
+    },
+    {
+        "merged": "com.dicoding.myflexiblefragment.app-mergeDebugResources-31:/layout/fragment_detail_category.xml",
+        "source": "com.dicoding.myflexiblefragment.app-main-34:/layout/fragment_detail_category.xml"
+    },
+    {
+        "merged": "com.dicoding.myflexiblefragment.app-mergeDebugResources-31:/layout/activity_main.xml",
+        "source": "com.dicoding.myflexiblefragment.app-main-34:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.dicoding.myflexiblefragment.app-mergeDebugResources-31:/layout/fragment_category.xml",
+        "source": "com.dicoding.myflexiblefragment.app-main-34:/layout/fragment_category.xml"
+    },
+    {
+        "merged": "com.dicoding.myflexiblefragment.app-mergeDebugResources-31:/layout/fragment_home.xml",
+        "source": "com.dicoding.myflexiblefragment.app-main-34:/layout/fragment_home.xml"
+    },
+    {
+        "merged": "com.dicoding.myflexiblefragment.app-mergeDebugResources-31:/layout/activity_profile.xml",
+        "source": "com.dicoding.myflexiblefragment.app-main-34:/layout/activity_profile.xml"
+    }
+]
