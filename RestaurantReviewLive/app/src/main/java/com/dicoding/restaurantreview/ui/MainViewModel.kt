@@ -9,6 +9,7 @@ import com.dicoding.restaurantreview.data.response.PostReviewResponse
 import com.dicoding.restaurantreview.data.response.Restaurant
 import com.dicoding.restaurantreview.data.response.RestoResponse
 import com.dicoding.restaurantreview.data.retrofit.ApiConfig
+import com.dicoding.restaurantreview.util.Event
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +23,9 @@ class MainViewModel : ViewModel() {
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
+
+    private val _snackbarText = MutableLiveData<Event<String>>()
+    val snackbarText: LiveData<Event<String>> = _snackbarText
 
     companion object {
         private const val TAG = "MainViewModel"
@@ -64,6 +68,7 @@ class MainViewModel : ViewModel() {
                 _isLoading.value = false
                 if(response.isSuccessful) {
                     _listReview.value = response.body()?.customerReviews
+                    _snackbarText.value = Event(response.body()?.message.toString())
                 } else {
                     Log.e(TAG, "onFailure: ${response.message()}")
                 }
