@@ -47,7 +47,7 @@ class DetailUserActivity : AppCompatActivity() {
             showLoading(it)
         }
 
-        val username = intent.getStringExtra(EXTRA_ID)
+//        val username = intent.getStringExtra(EXTRA_ID)
 
         detailViewModel.getDetailUser(dataUser.login)
         detailViewModel.detailUser.observe(this) {
