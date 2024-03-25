@@ -1,5 +1,6 @@
 package com.dicoding.mydatastore
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
@@ -20,6 +21,11 @@ class MainActivity : AppCompatActivity() {
         val mainViewModel = ViewModelProvider(this, ViewModelFactory(pref)).get(
             MainViewModel::class.java
         )
+
+        binding.btnPindah.setOnClickListener {
+            val intentt = Intent(this, TesActivity::class.java)
+            startActivity(intentt)
+        }
 
         mainViewModel.getThemeSettings().observe(this) { DarkMode: Boolean ->
             if (DarkMode) {
