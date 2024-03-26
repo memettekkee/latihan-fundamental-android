@@ -68,7 +68,6 @@ class MainActivity : AppCompatActivity() {
                 responseBody: ByteArray,
                 error: Throwable
             ) {
-                TODO("Not yet implemented")
 
                 binding.progressBar.visibility = View.INVISIBLE
 
