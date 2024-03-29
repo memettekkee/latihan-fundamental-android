@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <item
+            android:id="@+id/menuFav"
+            android:icon="@drawable/ic_fav"
+            android:title="@string/favourite"
+            app:showAsAction="ifRoom" />
+
+        <item
+            android:id="@+id/menuTheme"
+            android:icon="@drawable/ic_mode"
+            android:title="@string/theme"
+            app:showAsAction="ifRoom" />
+
+    </group>
+
+</menu>

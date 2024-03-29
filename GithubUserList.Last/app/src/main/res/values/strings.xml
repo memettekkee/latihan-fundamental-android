@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">GithubUserList</string>
+    <string name="hint">Search User</string>
+    <string name="username">Username</string>
+    <string name="name">Name</string>
+    <string name="followers">Followers</string>
+    <string name="following">Following</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="github">Github List User</string>
+    <string name="favorit">Favorite User</string>
+    <string name="detail_user">Detail User</string>
+    <string name="favourite">Favourite</string>
+    <string name="theme">Theme</string>
+    <string name="switch_theme">Ganti Tema</string>
+</resources>
