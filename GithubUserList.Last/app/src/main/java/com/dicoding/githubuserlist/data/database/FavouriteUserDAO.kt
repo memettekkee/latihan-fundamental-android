@@ -6,23 +6,19 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
-
+import com.dicoding.githubuserlist.data.response.UserItems
 
 @Dao
 interface FavouriteUserDAO {
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(favoriteUser: FavouriteUser)
+    @Query("SELECT EXISTS(SELECT * FROM FavoriteUser WHERE login = :username)")
+    fun isUserFavorited(username: String): Boolean
 
-//    @Update
-//    suspend fun update(favoriteUser: FavouriteUser)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insert(user: UserItems)
 
     @Delete
-    suspend fun delete(favoriteUser: FavouriteUser)
+    fun delete(user: UserItems)
 
-    @Query("SELECT * from FavouriteUser")
-    fun getAllFavoriteUser(): LiveData<List<FavouriteUser>>
-
-    @Query("SELECT EXISTS(SELECT * FROM FavouriteUser WHERE FavouriteUser.username = :username)")
-    fun isFavorite(username: String): LiveData<Boolean>
+    @Query("SELECT * FROM FavoriteUser")
+    fun getAllFavoriteUser(): LiveData<List<UserItems>>
 }

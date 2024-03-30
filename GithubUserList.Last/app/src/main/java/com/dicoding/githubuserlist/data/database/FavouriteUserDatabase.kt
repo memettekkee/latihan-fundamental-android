@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.dicoding.githubuserlist.data.response.UserItems
 
 
-@Database(entities = [FavouriteUser::class], version = 1)
+@Database(entities = [UserItems::class], version = 3)
 abstract class FavouriteUserDatabase: RoomDatabase() {
 
     abstract fun favoriteUserDao(): FavouriteUserDAO
@@ -21,8 +22,8 @@ abstract class FavouriteUserDatabase: RoomDatabase() {
                 synchronized(FavouriteUserDatabase::class.java) {
                     INSTANCE = Room.databaseBuilder(
                         context.applicationContext,
-                        FavouriteUserDatabase::class.java, "favorite_user_database"
-                    )
+                        FavouriteUserDatabase::class.java, "favorite_user_database")
+                        .fallbackToDestructiveMigration()
                         .build()
                 }
             }

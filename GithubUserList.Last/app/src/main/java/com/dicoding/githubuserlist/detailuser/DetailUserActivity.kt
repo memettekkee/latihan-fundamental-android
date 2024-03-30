@@ -3,8 +3,6 @@ package com.dicoding.githubuserlist.detailuser
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.service.autofill.UserData
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.annotation.StringRes
@@ -13,26 +11,19 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.dicoding.githubuserlist.R
 import com.dicoding.githubuserlist.adapter.PagerAdapter
-import com.dicoding.githubuserlist.adapter.UserListAdapter
-import com.dicoding.githubuserlist.data.database.FavouriteUser
-import com.dicoding.githubuserlist.data.response.DetailUserResponse
+import com.dicoding.githubuserlist.data.Repository
 import com.dicoding.githubuserlist.data.response.UserItems
-import com.dicoding.githubuserlist.data.response.UserResponse
 import com.dicoding.githubuserlist.databinding.ActivityDetailUserBinding
-import com.dicoding.githubuserlist.favourite.ViewModelFactoryFav
-import com.dicoding.githubuserlist.theme.ViewModelFactory
 import com.google.android.material.tabs.TabLayoutMediator
 
 class DetailUserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetailUserBinding
-    private lateinit var username: String
+    private lateinit var mRepository: Repository
     private lateinit var dataUser: UserItems
     private lateinit var detailViewModel: DetailViewModel
-    private lateinit var detailUser: DetailUserResponse
 
     companion object {
         const val EXTRA_ID = "extra_id"
-
         @StringRes
         private val TAB_TITLES = intArrayOf(
             R.string.followers,
@@ -40,77 +31,76 @@ class DetailUserActivity : AppCompatActivity() {
         )
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityDetailUserBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            dataUser = intent.getParcelableExtra(EXTRA_ID, UserItems::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            dataUser = intent.getParcelableExtra(EXTRA_ID)!!
+        }
 
-    private fun setFavourite() {
-        Log.d("info2", "infosettt")
-        val ivFav = binding.fabAdd
-//        detailViewModel.isFavourite(username).observe(this@DetailUserActivity)
-        detailViewModel.isFavourite(username)
-        detailViewModel.isFavourite.observe(this)
-        {
+        detailViewModel = ViewModelProvider(this, ViewModelFactoryDetail(application))[DetailViewModel::class.java]
 
-            Log.d("info4", "cek")
+        mRepository = Repository(application)
 
-            when (it) {
+        detailViewModel.isLoading.observe(this) {
+            showLoading(it)
+        }
 
+        detailViewModel.getDetailUser(dataUser.login)
+        detailViewModel.detailUser.observe(this) {
+                userData ->
+            binding.tvUsername.text = userData.login
+            binding.tvName.text = userData.name
+            binding.tvFollower.text = "${userData.followers} Followers"
+            binding.tvFollowing.text = "${userData.following} Following"
+            Glide
+                .with(this)
+                .load(userData.avatarUrl)
+                .into(binding.ivPhoto)
 
-                true -> {
-                    ivFav.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            ivFav.context,
-                            R.drawable.ic_favourite
-                        )
-                    )
-                    ivFav.setOnClickListener {
-                        val user = FavouriteUser(detailUser.login, detailUser.avatarUrl)
-                        detailViewModel.saveFavourite(user)
+        }
 
-                        Log.d("info1", "onklik")
-                    }
-                }
-                false -> {
-                    ivFav.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            ivFav.context,
-                            R.drawable.ic_favourite_border
-                        )
-                    )
-                    ivFav.setOnClickListener {
-                        val user = FavouriteUser(detailUser.login, detailUser.avatarUrl)
-                        detailViewModel.deleteFavourite(user)
-                    }
-                }
+        val pagerAdapter = PagerAdapter(this, dataUser.login)
+        binding.viewPager.adapter = pagerAdapter
+        TabLayoutMediator(binding.tabs, binding.viewPager) {tab, position ->
+            tab.text = resources.getString(TAB_TITLES[position])
+        }.attach()
 
-
-
-//                true -> {
-//                    ivFav.setImageDrawable(
-//                        ContextCompat.getDrawable(
-//                            ivFav.context,
-//                            R.drawable.ic_favourite
-//                        )
-//                    )
-//                    ivFav.setOnClickListener {
-//                        val user = FavouriteUser(detailUser.login, detailUser.avatarUrl)
-//                        detailViewModel.deleteFavourite(user)
-//                    }
-//                }
-//                false -> {
-//                    ivFav.setImageDrawable(
-//                        ContextCompat.getDrawable(
-//                            ivFav.context,
-//                            R.drawable.ic_favourite_border
-//                        )
-//                    )
-//                    ivFav.setOnClickListener {
-//                        val user = FavouriteUser(detailUser.login, detailUser.avatarUrl)
-//                        detailViewModel.saveFavourite(user)
-//                    }
-//                }
-
-
+        val fabFav = binding.fabAdd
+        var isUserInDatabase = false
+        detailViewModel.checkUserFavorite(dataUser.login) { isFav ->
+            isUserInDatabase = if (isFav) {
+                fabFav.setImageDrawable(ContextCompat.getDrawable(fabFav.context, R.drawable.ic_favourite))
+                true
+            } else {
+                fabFav.setImageDrawable(ContextCompat.getDrawable(fabFav.context, R.drawable.ic_favourite_border))
+                false
             }
+        }
+
+        fabFav.setOnClickListener {
+            if (isUserInDatabase) {
+                detailViewModel.deleteFromDb(dataUser)
+                fabFav.setImageDrawable(ContextCompat.getDrawable(fabFav.context, R.drawable.ic_favourite_border))
+            } else {
+                detailViewModel.insertToDb(dataUser)
+                fabFav.setImageDrawable(ContextCompat.getDrawable(fabFav.context, R.drawable.ic_favourite))
+            }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

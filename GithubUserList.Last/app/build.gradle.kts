@@ -25,7 +25,8 @@ android {
             load(FileInputStream(project.rootProject.file("local.properties")))
         }
 
-       buildConfigField("String", "TOKEN", "${properties.getProperty("GITHUB_TOKEN")}")
+       buildConfigField("String", "TOKEN", properties.getProperty("GITHUB_TOKEN"))
+        buildConfigField("String", "BASE_URL", properties.getProperty("GITHUB_WEB"))
     }
 
     buildTypes {

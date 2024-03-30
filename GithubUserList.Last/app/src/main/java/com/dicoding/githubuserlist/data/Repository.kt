@@ -1,42 +1,40 @@
 package com.dicoding.githubuserlist.data
 
-import android.util.Log
+import android.app.Application
 import androidx.lifecycle.LiveData
-import com.dicoding.githubuserlist.data.database.FavouriteUser
 import com.dicoding.githubuserlist.data.database.FavouriteUserDAO
-import com.dicoding.githubuserlist.data.retrofit.ApiService
+import com.dicoding.githubuserlist.data.database.FavouriteUserDatabase
+import com.dicoding.githubuserlist.data.response.UserItems
+import com.dicoding.githubuserlist.util.AppExecutors
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 
 class Repository(
-    private val favoriteUserDao: FavouriteUserDAO
+    application: Application
 ) {
-    suspend fun saveFavorite(favorite: FavouriteUser) {
-        favoriteUserDao.insert(favorite)
+
+    private val mUserDAO: FavouriteUserDAO
+    private val executorService: ExecutorService = Executors.newSingleThreadExecutor()
+    private val appExecutors: AppExecutors = AppExecutors()
+
+    init {
+        val db = FavouriteUserDatabase.getDatabase(application)
+        mUserDAO = db.favoriteUserDao()
     }
 
-    suspend fun delete(favorite: FavouriteUser) {
-        favoriteUserDao.delete(favorite)
+    fun getAllFavoriteUser(): LiveData<List<UserItems>> = mUserDAO.getAllFavoriteUser()
+
+    fun insert(user: UserItems) {
+        executorService.execute { mUserDAO.insert(user) }
+    }
+    fun checkByUsername(username: String, callback: (Boolean) -> Unit) {
+        appExecutors.diskIO.execute {
+            val isFavorited = mUserDAO.isUserFavorited(username)
+            callback(isFavorited)
+        }
     }
 
-    fun getFavoriteUser(): LiveData<List<FavouriteUser>> =
-        favoriteUserDao.getAllFavoriteUser()
-
-    fun isFavorite(username: String): LiveData<Boolean> {
-        val tes = favoriteUserDao.isFavorite(username)
-
-        Log.d("info6", "bisa dongggggggggggggggg")
-
-        return tes
-    }
-//        favoriteUserDao.isFavorite(username)
-    // disini
-
-    companion object {
-        @Volatile
-        private var instance: Repository? = null
-        fun getInstance(
-            favoriteUserDao: FavouriteUserDAO,
-        ): Repository = instance ?: synchronized(this) {
-            instance ?: Repository(favoriteUserDao)
-        }.also { instance = it }
+    fun delete(user: UserItems) {
+        executorService.execute { mUserDAO.delete(user) }
     }
 }

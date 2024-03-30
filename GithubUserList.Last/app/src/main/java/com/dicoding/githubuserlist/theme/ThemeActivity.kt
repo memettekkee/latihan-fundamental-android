@@ -2,13 +2,9 @@ package com.dicoding.githubuserlist.theme
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.lifecycle.ViewModelProvider
-import com.dicoding.githubuserlist.R
 import com.dicoding.githubuserlist.databinding.ActivityThemeBinding
-import com.google.android.material.switchmaterial.SwitchMaterial
 
 class ThemeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityThemeBinding

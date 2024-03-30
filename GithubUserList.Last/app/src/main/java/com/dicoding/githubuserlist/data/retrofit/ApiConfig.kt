@@ -1,12 +1,11 @@
 package com.dicoding.githubuserlist.data.retrofit
 
-import de.hdodenhof.circleimageview.BuildConfig
+import com.dicoding.githubuserlist.BuildConfig
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
 
 class ApiConfig {
     companion object {
@@ -15,7 +14,7 @@ class ApiConfig {
             val authInterceptor = Interceptor { chain ->
                 val req = chain.request()
                 val requestHeaders = req.newBuilder()
-                    .addHeader("Authorization", "value mu")
+                    .addHeader("Authorization", "${BuildConfig.TOKEN}")
                     .build()
                 chain.proceed(requestHeaders)
             }
@@ -24,7 +23,7 @@ class ApiConfig {
                 .addInterceptor(authInterceptor)
                 .build()
             val retrofit = Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
+                .baseUrl("${BuildConfig.BASE_URL}")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()

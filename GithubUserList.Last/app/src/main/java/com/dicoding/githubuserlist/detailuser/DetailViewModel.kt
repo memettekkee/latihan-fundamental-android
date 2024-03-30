@@ -1,33 +1,30 @@
 package com.dicoding.githubuserlist.detailuser
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.dicoding.githubuserlist.data.Repository
-import com.dicoding.githubuserlist.data.database.FavouriteUser
 import com.dicoding.githubuserlist.data.response.DetailUserResponse
 import com.dicoding.githubuserlist.data.response.UserItems
-import com.dicoding.githubuserlist.data.response.UserResponse
 import com.dicoding.githubuserlist.data.retrofit.ApiConfig
-import com.dicoding.githubuserlist.home.UserViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DetailViewModel(private val repository: Repository) : ViewModel() {
+class DetailViewModel(application: Application) : AndroidViewModel(application) {
+
+    private var repository: Repository
+    init {
+        repository = Repository(application)
+    }
+
     private val _detailuser = MutableLiveData<DetailUserResponse>()
     val detailUser: LiveData<DetailUserResponse> = _detailuser
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _isFavourite = MediatorLiveData<Boolean>()
-    val isFavourite: LiveData<Boolean> = _isFavourite
 
     companion object {
         private const val TAG = "DetailViewModel"
@@ -55,17 +52,17 @@ class DetailViewModel(private val repository: Repository) : ViewModel() {
         })
     }
 
-    fun isFavourite(username: String) {
-        val liveData = repository.isFavorite(username)
-        Log.d("info5", "ceks")
-        _isFavourite.addSource(liveData) { result ->
-            _isFavourite.value = result
+    fun insertToDb(user: UserItems) {
+        repository.insert(user)
+    }
+
+    fun deleteFromDb(user: UserItems){
+        repository.delete(user)
+    }
+
+    fun checkUserFavorite(username: String, callback: (Boolean) -> Unit) {
+        repository.checkByUsername(username) { isFavorited ->
+            callback(isFavorited)
         }
-    } // disini errornya
-
-    fun saveFavourite(favourite: FavouriteUser) =
-        viewModelScope.launch(Dispatchers.IO) { repository.saveFavorite(favourite)}
-
-    fun deleteFavourite(favourite: FavouriteUser) =
-        viewModelScope.launch(Dispatchers.IO) { repository.delete(favourite)}
+    }
 }

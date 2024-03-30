@@ -15,7 +15,6 @@ import com.dicoding.githubuserlist.data.response.UserItems
 import com.dicoding.githubuserlist.databinding.ActivityMainBinding
 import com.dicoding.githubuserlist.favourite.FavouriteActivity
 import com.dicoding.githubuserlist.theme.SettingPreferences
-//import com.dicoding.githubuserlist.favourite.FavouriteActivity
 import com.dicoding.githubuserlist.theme.ThemeActivity
 import com.dicoding.githubuserlist.theme.dataStore
 
@@ -35,8 +34,6 @@ class MainActivity : AppCompatActivity() {
         binding.rvGithub.layoutManager = layoutManager
         val itemDecoration = DividerItemDecoration(this, layoutManager.orientation)
         binding.rvGithub.addItemDecoration(itemDecoration)
-
-//        val userViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(UserViewModel::class.java)
 
         viewModel.setUser.observe(this) {
             setUser(it)
